@@ -78,6 +78,14 @@ SELECT * FROM actors LIMIT 5;
 SELECT * FROM actors LIMIT 5 offset 5;
 ```
 
+## FETCH
+```sql
+SELECT * FROM actors FETCH FIRST 5 ROWS ONLY;
+SELECT * FROM actors FETCH FIRST ROW ONLY;
+SELECT * FROM actors FETCH FIRST 5 ROWS ONLY offset 5;
+```
+
+
 # Data types
 ## Boolean
 
@@ -111,6 +119,28 @@ select '0', FALSE = '0';
 ## Character
 CHAR(n) - fixed length, blank padded
 VARCHAR(n) - variable length
+
+## Numeric
+- SMALLINT 2 bytes
+- INTEGER 4 bytes
+- BIGINT 8 bytes
+- DECIMAL(p, s) - exact numeric
+- NUMERIC(p, s) - exact numeric
+- REAL - 4 bytes
+- DOUBLE PRECISION - 8 bytes
+- SMALLSERIAL - auto incrementing integer
+- SERIAL - auto incrementing integer
+- BIGSERIAL - auto incrementing integer
+
+## Decimal
+Decimal(p, s) - p is precision, s is scale
+```sql
+SELECT 123.456::DECIMAL(5, 2);
+```
+
+Precision is the total number of digits in the number.
+Scale is the number of digits to the right of the decimal point.
+
 
 ## Casting
 ```sql
@@ -171,6 +201,98 @@ alter sequence my_sequence_small restart with 100;
 ```
 
 # Aggregate functions
+## COUNT
 ```sql
 SELECT COUNT(*) FROM actors;
+```
+Distinct
+```sql
+select count(movies.movie_length) from movies;
+select count(distinct movies.movie_length) from movies;
+```
+## SUM
+```sql
+select sum(revenues_domestic), sum(revenues_international) from movies_revenues;
+
+select sum(distinct revenues_domestic), sum(revenues_international) from movies_revenues;
+```
+
+## MIN/MAX
+```sql
+select min(revenues_domestic), max(revenues_domestic) from movies_revenues;
+```
+
+## GREATEST/LEAST
+```sql
+select greatest(1, 2, 3, 4, 5), least(1, 2, 3, 4, 5);
+```
+
+# Date time datatypes
+- DATE
+- TIME
+  - with time zone
+  - without time zone
+- TIMESTAMP
+- INTERVAL
+
+```sql
+SHOW DATESTYLE ; --ISO, MDY
+SET DATESTYLE TO 'ISO, DMY';
+```
+
+## String to date
+TO_DATE function
+TO_DATE(string, format)
+```sql
+SELECT '2019-01-01'::DATE;
+```
+TO_TIMESTAMP function
+TO_TIMESTAMP(string, format)
+```sql
+SELECT TO_TIMESTAMP('2019-01-01 12:00:00', 'YYYY-MM-DD HH24:MI:SS');
+```
+
+## Date to string
+TO_CHAR function
+TO_CHAR(date, format)
+
+select current_timestamp;
+
+```sql  
+SELECT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS');
+```
+
+## Date construction functions
+```sql
+select make_date(2019, 1, 1);
+select make_time(12, 30, 0);
+select make_timestamp(2019, 1, 1, 12, 30, 0);
+select make_interval(0, 0, 0, 0, 0, 10);
+```
+
+# GROUP BY
+```sql
+select movie_lang, count(*) from movies group by movie_lang;
+select movie_lang, age_certificate, avg(movie_length)
+from movies group by movie_lang, age_certificate order by movie_lang;
+```
+## HAVING
+
+# JOINS
+
+# UNION
+```sql
+select * from movies where movie_lang = 'English'
+union all
+select * from movies where movie_lang = 'Spanish';
+```
+
+```sql
+create table t1 (col1 int, col2 int);
+create table t2 (col3 int);
+insert into t1 values (1, 2), (3, 4);
+insert into t2 values (5), (6);
+select col1, col2 from t1
+union
+select col3, null from t2;
 ```
