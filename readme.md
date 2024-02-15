@@ -279,6 +279,84 @@ from movies group by movie_lang, age_certificate order by movie_lang;
 ## HAVING
 
 # JOINS
+## INNER JOIN
+In PostgreSQL, the `INNER JOIN` keyword selects records that 
+have matching values in both tables. Here's a basic example:
+
+```sql
+SELECT table1.column1, table2.column2 
+FROM table1 
+INNER JOIN table2 
+ON table1.matching_column = table2.matching_column;
+```
+
+In this example, `table1` and `table2` are the names of the 
+tables you want to join. `column1` and `column2` are the names 
+of the columns you want to select. `matching_column` is the 
+column that both tables have in common, 
+which PostgreSQL will use to combine the tables.
+
+Let's say you have two tables, `orders` and `customers`, and you 
+want to list all the orders along with the customer information. 
+You could do this with an `INNER JOIN` like so:
+
+```sql
+SELECT orders.order_id, customers.customer_name, customers.address 
+FROM orders 
+INNER JOIN customers 
+ON orders.customer_id = customers.customer_id;
+```
+
+This will return a table that includes the `order_id` from the `orders` table and the `customer_name` and `address` from the `customers` table, for all orders where the `customer_id` in the `orders` table matches the `customer_id` in the `customers` table.
+```sql
+select * from movies inner join 
+    revenues on movies.movie_id = revenues.movie_id;
+```
+
+INNER JOIN with USING, if they have same column name
+```sql  
+select * from movies inner join 
+    revenues using (movie_id);
+```
+
+## LEFT JOIN
+In PostgreSQL, the `LEFT JOIN` keyword returns all 
+records from the left table (table1), and the matched 
+records from the right table (table2). The result is NULL 
+on the right side, if there is no match.
+
+Here's a basic example:
+
+```sql
+SELECT table1.column1, table2.column2
+FROM table1
+LEFT JOIN table2
+ON table1.matching_column = table2.matching_column;
+```
+
+In this example, `table1` and `table2` are the names 
+of the tables you want to join. `column1` and `column2` 
+are the names of the columns you want to select. `matching_column` 
+is the column that both tables have in common, which PostgreSQL 
+will use to combine the tables.
+
+Let's say you have two tables, `orders` and `customers`, 
+and you want to list all the orders along with the customer 
+information, including orders that don't have a customer. 
+You could do this with a `LEFT JOIN` like so:
+
+```sql
+SELECT orders.order_id, customers.customer_name, customers.address
+FROM orders
+LEFT JOIN customers
+ON orders.customer_id = customers.customer_id;
+```
+
+This will return a table that includes the `order_id` 
+from the `orders` table and the `customer_name` and `address` 
+from the `customers` table, for all orders. 
+If an order doesn't have a matching `customer_id` in 
+the `customers` table, the `customer_name` and `address` will be NULL.
 
 # UNION
 ```sql
@@ -296,3 +374,141 @@ select col1, col2 from t1
 union
 select col3, null from t2;
 ```
+
+# Arrays
+
+In PostgreSQL, an array is a user-defined data type that represents a 
+collection of elements of a single data type. Arrays can be used to 
+store multiple values in a single column.
+
+Here's how you can create, insert, and select data from arrays:
+
+1. **Create a table with array columns:**
+```sql
+CREATE TABLE test_array (
+    id SERIAL PRIMARY KEY,
+    numbers INTEGER[],
+    words TEXT[]
+);
+```
+In this example, `numbers` is an array of integers and `words` is 
+an array of text.
+
+2. **Insert data into the array columns:**
+```sql
+INSERT INTO test_array (numbers, words) 
+VALUES ('{1,2,3}', '{"one", "two", "three"}');
+```
+Here, we're inserting an array of integers into the `numbers` 
+column and an array of text into the `words` column.
+
+3. **Select data from the array columns:**
+```sql
+SELECT * FROM test_array;
+```
+This will return all rows from the `test_array` table.
+
+4. **Access individual elements of an array:**
+```sql
+SELECT numbers[1], words[2] FROM test_array;
+```
+This will return the first element from the `numbers` 
+array and the second element from the `words` array.
+
+Remember that array indices in PostgreSQL start from 1, not 0.
+
+Array is a collection of elements of the same data type.
+```sql
+create table t (col1 int[], col2 text[]);
+insert into t values ('{1, 2, 3}', '{"one", "two", "three"}');
+select col1[1], col2[1] from t;
+```
+
+You can update the values in an array column in PostgreSQL using the `UPDATE` 
+statement along with the array index. Here's an example:
+
+```sql
+UPDATE test_array
+SET numbers[1] = 10, words[2] = 'ten'
+WHERE id = 1;
+```
+
+In this example, we're updating the first element of the `numbers` 
+array to `10` and the second element of the `words` array to `'ten'` 
+for the row where `id` is `1`.
+
+Remember that array indices in PostgreSQL start from 1, not 0.
+
+In PostgreSQL, you can't directly delete an element from 
+an array. However, you can achieve this by creating a new 
+array that excludes the element you want to remove.
+
+Here's an example of how you can do this:
+
+```sql
+UPDATE test_array
+SET numbers = array_remove(numbers, 10)
+WHERE id = 1;
+```
+
+In this example, we're creating a new array for the `numbers` column that excludes the number `10`. The `array_remove` function takes two arguments: the original array and the element to remove. It returns a new array that excludes all instances of the element to remove.
+
+Remember that this will remove all instances of the number `10` from the `numbers` array. If you want to remove an element at a specific position, you would need to use a different approach, such as using the `array_cat` function to concatenate two subarrays that exclude the element at the specific position.
+
+In PostgreSQL, you can concatenate two 
+arrays using the `||` operator. Here's an example:
+
+```sql
+SELECT ARRAY[1,2,3] || ARRAY[4,5,6];
+```
+
+This will return a new array: `{1,2,3,4,5,6}`.
+
+## Ranges
+In PostgreSQL, a range is a data type that represents a range 
+of values of an element type. It can be discrete ranges 
+(such as all integer values 1 through 10) or continuous ranges 
+(such as all real numbers from 0 to 1).
+
+Ranges can be used to simplify queries and improve performance 
+for range-based queries. For example, instead of having two 
+separate columns for start date and end date, you can have 
+a single range column that represents the duration.
+
+Here's an example of how you can create a table with a range column:
+
+```sql
+CREATE TABLE schedule (
+    id SERIAL PRIMARY KEY,
+    duration TSRANGE
+);
+```
+
+In this example, `duration` is a range of timestamps. 
+You can insert data into this table like this:
+
+```sql
+INSERT INTO schedule (duration)
+VALUES ('[2022-01-01 14:30, 2022-01-01 15:30)');
+```
+
+This inserts a range from 14:30 to 15:30 on 2022-01-01.
+
+You can also query this data using range operators. 
+For example, to find all schedules that contain a specific time:
+
+```sql
+SELECT * FROM schedule
+WHERE duration @> '2022-01-01 15:00'::TIMESTAMP;
+```
+
+This will return all rows where the `duration` 
+range contains the timestamp '2022-01-01 15:00'.
+
+- INT4RANGE - range of integers
+- INT8RANGE - range of big integers
+- NUMRANGE - range of numeric values
+- DATERANGE - range of dates
+- TSRANGE - range of timestamps
+- TSTZRANGE - range of timestamps with time zones
+
