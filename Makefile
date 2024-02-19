@@ -18,3 +18,6 @@ pg-kill:
 
 pg-logs:
 	docker logs pg-tour
+
+pg-psql:
+	docker exec -it pg-tour psql -U postgres
