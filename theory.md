@@ -127,3 +127,47 @@ causing unnecessary disk I/O. If it's too large, it can waste memory.
 
 In summary, the Free Space Map is an essential component of PostgreSQL's storage 
 system, helping to manage and optimize the use of disk space.
+
+The PostgreSQL Free Space Map (FSM) is a crucial component that 
+helps maintain efficient storage allocation and performance within your database. 
+Here's a breakdown of its key aspects:
+
+**Purpose:**
+
+- Tracks available space within each relation (table or index) in a PostgreSQL database.
+- Improves performance by efficiently locating free space for new data insertions.
+- Minimizes fragmentation by prioritizing contiguous free space allocation.
+
+**Structure:**
+
+- Each relation has a separate FSM file (`relation_fileno_fsm`) stored alongside its main data file.
+- Organized as a tree structure:
+    - Leaf nodes: Represent individual pages (blocks) with their available free space.
+    - Non-leaf nodes: Aggregate information from their children, indicating maximum free space.
+- Uses one byte per page to store free space information (rounded to 1/256 of page size).
+
+**Operations:**
+
+- **Insert:** Uses FSM to find a page with enough free space for new data.
+- **Update:** FSM is updated to reflect changes in space usage after updates.
+- **VACUUM:** Reclaims unused space and updates FSM accordingly.
+
+**Benefits:**
+
+- Efficient space allocation leads to faster writes and improved performance.
+- Minimizes fragmentation for better read performance and space utilization.
+- Helps identify potential free space issues and optimize table storage.
+
+**Considerations:**
+
+- Accessing FSM information usually requires superuser privileges or specific roles.
+- Free space information is not exact and may have slight discrepancies.
+- For heavily updated tables, VACUUM needs to be run periodically to keep FSM accurate.
+
+**Useful tools:**
+
+- `pg_freespacemap` extension provides functions to examine FSMs.
+- `VACUUM` and `CLUSTER` commands manage and optimize free space.
+
+**Overall, understanding the PostgreSQL Free Space Map helps you leverage 
+efficient storage management and optimize your database performance.**
