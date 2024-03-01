@@ -35,15 +35,25 @@ record changes to complex transactions.
 In addition to the ACID properties, there are other 
 important properties and concepts related to database transactions:
 
-1. **Concurrency Control**: This is the process of managing simultaneous operations without conflicting with each another. It is essential for the correct functioning of a database system where multiple transactions are being executed simultaneously and independently.
+1. **Concurrency Control**: This is the process of managing simultaneous operations without 
+conflicting with each another. It is essential for the correct functioning of a database 
+system where multiple transactions are being executed simultaneously and independently.
 
-2. **Deadlock Management**: Deadlocks are a condition where two or more transactions are waiting indefinitely for each other to release resources. A good database transaction system should have mechanisms to prevent, detect and manage deadlocks.
+2. **Deadlock Management**: Deadlocks are a condition where two or more transactions are 
+waiting indefinitely for each other to release resources. A good database transaction 
+system should have mechanisms to prevent, detect and manage deadlocks.
 
-3. **Transaction Log**: This is a history of all actions related to database modifications. It is used to ensure durability and atomicity of transactions. In case of a system failure, the transaction log is used to recover the database to a consistent state.
+3. **Transaction Log**: This is a history of all actions related to database modifications. 
+It is used to ensure durability and atomicity of transactions. In case of a system failure, 
+the transaction log is used to recover the database to a consistent state.
 
-4. **Savepoints**: These are markers within a transaction that allow for partial rollbacks. Instead of rolling back the entire transaction, you can roll back to a specific savepoint, discarding only part of the transaction.
+4. **Savepoints**: These are markers within a transaction that allow for partial rollbacks. 
+Instead of rolling back the entire transaction, you can roll back to a specific savepoint, 
+discarding only part of the transaction.
 
-5. **Nested Transactions**: These are transactions that exist within the context of a larger transaction. If a nested transaction fails, it can be rolled back without affecting the larger transaction.
+5. **Nested Transactions**: These are transactions that exist within the context of a 
+larger transaction. If a nested transaction fails, it can be rolled back without 
+affecting the larger transaction.
 
 6. **Distributed Transactions**: These are transactions that 
 involve multiple network hosts. They can be more complex 
@@ -53,7 +63,8 @@ or other resources.
 
 7. **Isolation Levels**: These define how and when the changes 
 made by one transaction are visible to other concurrent transactions. 
-The isolation level can impact the performance and concurrency of a system. The four standard isolation levels are Read Uncommitted, Read Committed, Repeatable Read, and Serializable.
+The isolation level can impact the performance and concurrency of a system. The four 
+standard isolation levels are Read Uncommitted, Read Committed, Repeatable Read, and Serializable.
 
 # Transaction
 A transaction is a sequence of operations performed as a single
