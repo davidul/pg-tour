@@ -23,3 +23,45 @@ This SQL query will return a list of all user tables
 in the current database, sorted by their total size in 
 pages, in descending order. The `pg_statio_user_tables` view 
 contains I/O statistics for tables that the current user has access to.
+
+The structure of a PostgreSQL page is as follows:
+
+- **Page Header**: This is the first part of the page and contains metadata 
+about the page, such as the page number, the number of tuples on the page, 
+and the free space pointer.
+
+- **Item Identifiers**: These are pointers to the actual tuples. They are stored in 
+an array that starts immediately after the page header and grows downwards towards the 
+end of the page.
+
+- **Tuples**: The actual data rows. They are stored starting from the end of the page 
+and grow upwards towards the start of the page.
+
+- **Free Space**: The space between the item identifiers and the tuples is free 
+space that can be used to store new tuples.
+
+The page size in PostgreSQL is typically 8KB, and this 
+size includes the page header, item identifiers, tuples, 
+and free space. The page size is a compile-time setting 
+and can be increased up to 32KB, but this requires 
+recompiling PostgreSQL.
+
+Here is a visual representation of a PostgreSQL page:
+
+```
++-----------------+
+| Page Header     |
++-----------------+
+| Item Identifiers|
+| ...             |
++-----------------+
+| Free Space      |
++-----------------+
+| ...             |
+| Tuples          |
++-----------------+
+```
+
+The page header is at the top, followed by the item identifiers. The tuples are at the 
+bottom, and the free space is in the middle. The item identifiers and tuples grow towards 
+each other as more data is added to the page.

@@ -21,3 +21,7 @@ pg-logs:
 
 pg-psql:
 	docker exec -it pg-tour psql -U postgres
+
+pg-psql-employees:
+	docker cp sample_data/performance/employees.sql pg-tour:/tmp
+	docker exec -it pg-tour psql -U postgres -f /tmp/employees.sql
