@@ -13,6 +13,11 @@ pg-movies:
 	docker exec -it pg-tour psql -U postgres -f /tmp/movie_database/movies_actors.sql
 	docker exec -it pg-tour psql -U postgres -f /tmp/movie_database/movies_revenues.sql
 
+pg-northwind:
+	docker cp sample_data/northwind pg-tour:/tmp
+	docker exec -it pg-tour psql -U postgres -f /tmp/northwind/create-db.sql
+	docker exec -it pg-tour psql -U postgres -d northwind -f /tmp/northwind/northwind.sql
+
 pg-kill:
 	docker kill pg-tour
 

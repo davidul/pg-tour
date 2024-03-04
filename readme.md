@@ -34,12 +34,32 @@ Sample data:
 # Create schema
 Schema is a namespace.
 ```sql
-    CREATE SCHEMA vehicle_db;
+    CREATE SCHEMA sample;
+```
+
+Drop schema
+```sql
+    DROP SCHEMA sample;
+```
+
+Drop schema with cascade (drop all objects in the schema)
+```sql
+    DROP SCHEMA sample CASCADE;
+```
+
+Show search path, the order in which PostgreSQL will look for objects.
+
+```sql
+SHOW search_path ;
 ```
 
 # Create Sequence
+
+Temporary sequence is valid only in current session - TEMPORARY (TEMP).
+
+
 ```sql
-CREATE SEQUENCE vehicle_db.armored_vehicle_seq
+CREATE SEQUENCE IF NOT EXISTS sample.armored_vehicle_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -49,7 +69,7 @@ CREATE SEQUENCE vehicle_db.armored_vehicle_seq
 
 # Create table
 ```sql
-CREATE TABLE vehicle_db.armored_vehicle (
+CREATE TABLE sample.armored_vehicle (
     id INT PRIMARY KEY,
     name VARCHAR(255),
     description VARCHAR(255),
@@ -545,3 +565,8 @@ range contains the timestamp '2022-01-01 15:00'.
 - TSRANGE - range of timestamps
 - TSTZRANGE - range of timestamps with time zones
 
+# Tablespace
+Specifies alternate location on the file system where the data is stored.
+```sql
+CREATE TABLESPACE my_tablespace LOCATION '/mnt/data';
+```
