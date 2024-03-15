@@ -28,3 +28,5 @@ to find the rows that satisfy the query.
 A bitmap index scan can be beneficial when the query requires
 multiple indexes to be used, and the combination of the indexes
 is more efficient than using a single index.
+
+
