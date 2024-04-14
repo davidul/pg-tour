@@ -1,9 +1,13 @@
 Sample data:
  - Movie Database
- - Northwind
+ - Northwind - [diagram](https://brucebauer.info/assets/ITEC3610/Northwind/Northwind-Sample-Database-Diagram.pdf)
  - Performance
+   - Analyze
+   - Explain
+   - Vacuum
+   - Parameters
 
-
+LATERAL Join ?
 
 - [Create schema](#Create-schema)
 - [Create Sequence](#Create-Sequence)
@@ -30,6 +34,8 @@ Sample data:
 - [UNION](#UNION)
 - [Arrays](#Arrays)
 - [Ranges](#Ranges)
+
+- ROW COnstructor
 
 # Create schema
 Schema is a namespace.
@@ -105,6 +111,12 @@ Logical operators
 - UNION ALL
 - INTERSECT
 - MINUS
+
+ANY returns true if any of the subquery values meet the condition.
+```sql
+SELECT * FROM northwind.public.categories WHERE category_name = ANY (
+    'Beverages', 'Condiments', 'Confections');
+```
 
 # WHERE clause
 ```sql  
