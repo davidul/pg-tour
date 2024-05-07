@@ -4,9 +4,10 @@ database level
 select datid, tup_fetched, tup_returned, tup_inserted, tup_updated from pg_stat_database;
 
 Live/dead tuples
+```sql
 select n_dead_tup, n_live_tup from pg_stat_all_tables;
 select n_live_tup, n_dead_tup from pg_stat_user_tables;
-
+```
 
 Backend type:
 ```sql

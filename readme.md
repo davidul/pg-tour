@@ -8,6 +8,7 @@ Sample data:
    - Parameters
 
 LATERAL Join ?
+Analytic functions
 
 - [Create schema](#Create-schema)
 - [Create Sequence](#Create-Sequence)
